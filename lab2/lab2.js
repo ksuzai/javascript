@@ -50,7 +50,7 @@ function factorial(n) {
  * @param {number} n - Порядковый номер числа Фибоначчи
  * @returns {bigint} n-е число Фибоначчи в формате BigInt
  */
-function fib(n) {
+export function fib(n) {
     if (n < 0) return 0n;
     if (n === 0) return 0n;
     if (n === 1) return 1n;
