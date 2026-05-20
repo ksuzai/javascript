@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Ввод числа</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        a {
+            display: inline-block;
+            font-size: 18px;
+            color: #007bff;
+            text-decoration: none;
+            border: 1px solid #007bff;
+            padding: 10px 20px;
+            border-radius: 5px;
+        }
+        a:hover {
+            background: #007bff;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <h1>Ввод числа</h1>
+    <a href="#" id="getNumberLink">Получить число</a>
+
+    <script>
+        'use strict';
+
+        const link = document.getElementById('getNumberLink');
+
+        function askForNumber() {
+            while (true) {
+                let input = prompt("Введите число, большее 100:");
+                
+                if (input === null) {
+                    return false;
+                }
+                
+                let num = Number(input);
+                
+                if (!isNaN(num) && num > 100) {
+                    return true;
+                }
+            }
+        }
+
+        link.addEventListener('click', function(event) {
+            event.preventDefault();
+            
+            const success = askForNumber();
+            
+            if (success) {
+                window.location.href = '/';
+            } else {
+                const allow = confirm("Вы не ввели число больше 100. Всё равно перейти?");
+                if (allow) {
+                    window.location.href = '/';
+                }
+            }
+        });
+    </script>
+</body>
+</html>

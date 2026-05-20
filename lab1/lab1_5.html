@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Таблица животных</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        form {
+            max-width: 300px;
+        }
+        input, button {
+            margin: 10px 0;
+            display: block;
+            width: 100%;
+            padding: 8px;
+            box-sizing: border-box;
+        }
+        button {
+            cursor: pointer;
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 10px;
+            font-size: 14px;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+        .info {
+            color: #666;
+            font-size: 12px;
+            margin-top: -5px;
+        }
+        pre {
+            background: #f4f4f4;
+            padding: 10px;
+            border: 1px solid #ddd;
+            overflow-x: auto;
+            font-family: monospace;
+            font-size: 12px;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <h1>Таблица животных</h1>
+    <form id="tableForm">
+        <label>Количество строк:</label>
+        <input type="number" id="rows" value="5" step="1" min="1" required>
+        <div class="info">Результат выводится в консоль</div>
+
+        <button type="button" id="drawBtn">Рисовать</button>
+    </form>
+
+    <script>
+        'use strict';
+
+        const SEQUENCE = ['dog', 'dog', 'dog', 'cat', 'cat'];
+        const COLS = 6;
+
+        function generateRow(startIndex) {
+            const row = [];
+            for (let i = 0; i < COLS; i++) {
+                const seqIndex = (startIndex + i) % SEQUENCE.length;
+                row.push(SEQUENCE[seqIndex]);
+            }
+            return row.join('\t'); 
+        }
+
+        function drawTable(rowsCount) {
+            console.clear();
+            
+            let startIndex = 0;
+            for (let rowNum = 0; rowNum < rowsCount; rowNum++) {
+                const row = generateRow(startIndex);
+                console.log(row);
+                startIndex = (startIndex + 1) % SEQUENCE.length;
+            }
+        }
+
+        document.getElementById('drawBtn').addEventListener('click', function() {
+            const input = document.getElementById('rows');
+            let rowsCount = parseInt(input.value, 10);
+            
+            if (isNaN(rowsCount) || rowsCount < 1) {
+                alert("Введите корректное количество строк (число >= 1)");
+                return;
+            }
+            
+            drawTable(rowsCount);
+            alert(`Таблица из ${rowsCount} строк выведена в консоль браузера (F12)`);
+        });
+    </script>
+</body>
+</html>

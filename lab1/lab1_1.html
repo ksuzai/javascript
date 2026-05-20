@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Пенсионный калькулятор</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        form {
+            max-width: 300px;
+        }
+        input, button, textarea {
+            margin: 10px 0;
+            display: block;
+            width: 100%;
+            padding: 5px;
+            box-sizing: border-box;
+        }
+        .radio-group {
+            margin: 10px 0;
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+        .radio-group label {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            cursor: pointer;
+        }
+        .radio-group input {
+            width: auto;
+            margin: 0;
+            display: inline-block;
+        }
+        button {
+            cursor: pointer;
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 8px;
+            font-size: 14px;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+        textarea {
+            resize: vertical;
+        }
+    </style>
+</head>
+<body>
+    <h1>Пенсионный калькулятор</h1>
+    <form id="pensionForm">
+        <label>Возраст:</label>
+        <input type="number" id="age" required>
+
+        <label>Пол:</label>
+        <div class="radio-group">
+            <label><input type="radio" name="gender" value="male" required> Мужской</label>
+            <label><input type="radio" name="gender" value="female" required> Женский</label>
+        </div>
+
+        <button type="submit">Рассчитать</button>
+        <textarea id="result" readonly placeholder="Результат..."></textarea>
+    </form>
+
+    <script>
+        'use strict';
+
+        document.getElementById('pensionForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const age = parseInt(document.getElementById('age').value, 10);
+            const gender = document.querySelector('input[name="gender"]:checked');
+            const result = document.getElementById('result');
+
+            if (isNaN(age) || !gender) {
+                result.value = "Да кто ты такой?";
+                return;
+            }
+
+            const isMale = gender.value === 'male';
+
+            if (age >= 0 && age <= 17) {
+                result.value = "Вам работать ещё рано — учитесь";
+            }
+            else if (age >= 18 && age <= 59 && isMale) {
+                result.value = "Вам ещё работать и работать";
+            }
+            else if (age >= 18 && age <= 54 && !isMale) {
+                result.value = "Вам ещё работать и работать";
+            }
+            else if (age >= 60 && age <= 64 && isMale) {
+                result.value = "Скоро пенсия!";
+            }
+            else if (age >= 55 && age <= 59 && !isMale) {
+                result.value = "Скоро пенсия!";
+            }
+            else if (age >= 65 && isMale) {
+                result.value = "Вам пора на пенсию";
+            }
+            else if (age >= 60 && !isMale) {
+                result.value = "Вам пора на пенсию";
+            }
+            else {
+                result.value = "Да кто ты такой?";
+            }
+        });
+    </script>
+</body>
+</html>
