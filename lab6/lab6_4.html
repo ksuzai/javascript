@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Редактируемая таблица</title>
+    <style>
+        table {
+            border-collapse: collapse;
+            margin: 20px;
+        }
+        td {
+            border: 1px solid #ccc;
+            padding: 10px;
+            min-width: 100px;
+            cursor: pointer;
+        }
+        .editing {
+            background-color: #ffffcc;
+        }
+        textarea {
+            width: 100%;
+            margin: 0;
+            padding: 0;
+            resize: none;
+            box-sizing: border-box;
+        }
+        .edit-controls {
+            margin-top: 5px;
+        }
+        .edit-controls button {
+            margin-right: 5px;
+        }
+    </style>
+</head>
+<body>
+    <table id="editableTable">
+        <tr>
+            <td>Ячейка 1</td>
+            <td>Ячейка 2</td>
+            <td>Ячейка 3</td>
+        </tr>
+        <tr>
+            <td>Ячейка 4</td>
+            <td>Ячейка 5</td>
+            <td>Ячейка 6</td>
+        </tr>
+    </table>
+
+    <script>
+        'use strict';
+        
+        const table = document.getElementById('editableTable');
+        let editingCell = null;
+        
+        function startEdit(cell) {
+            if (editingCell) return;
+            
+            editingCell = cell;
+            const originalHTML = cell.innerHTML;
+            
+            const textarea = document.createElement('textarea');
+            textarea.value = originalHTML;
+            textarea.style.width = '100%';
+            textarea.style.height = '60px';
+            textarea.style.resize = 'none';
+            
+            const okBtn = document.createElement('button');
+            okBtn.textContent = 'OK';
+            const cancelBtn = document.createElement('button');
+            cancelBtn.textContent = 'ОТМЕНА';
+            
+            const controls = document.createElement('div');
+            controls.className = 'edit-controls';
+            controls.appendChild(okBtn);
+            controls.appendChild(cancelBtn);
+            
+            cell.innerHTML = '';
+            cell.appendChild(textarea);
+            cell.appendChild(controls);
+            cell.classList.add('editing');
+            
+            textarea.focus();
+            
+            okBtn.onclick = function() {
+                cell.innerHTML = textarea.value;
+                cell.classList.remove('editing');
+                editingCell = null;
+            };
+            
+            cancelBtn.onclick = function() {
+                cell.innerHTML = originalHTML;
+                cell.classList.remove('editing');
+                editingCell = null;
+            };
+        }
+        
+        table.addEventListener('click', function(e) {
+            const cell = e.target.closest('td');
+            if (!cell) return;
+            if (editingCell === cell) return;
+            if (editingCell !== null) return;
+            
+            startEdit(cell);
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Show Prompt</title>
+    <style>
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        .modal {
+            background: white;
+            padding: 20px;
+            border-radius: 5px;
+            min-width: 300px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+        }
+        .modal input {
+            width: 100%;
+            padding: 8px;
+            margin: 10px 0;
+            box-sizing: border-box;
+        }
+        .modal button {
+            padding: 5px 15px;
+            margin-right: 10px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <button onclick="testPrompt()">Показать диалог</button>
+
+    <script>
+        'use strict';
+
+        function showPrompt(html, callback) {
+            const focusedElement = document.activeElement;
+            
+            const overlay = document.createElement('div');
+            overlay.className = 'modal-overlay';
+            
+            const modal = document.createElement('div');
+            modal.className = 'modal';
+            
+            const content = document.createElement('div');
+            content.innerHTML = html;
+            
+            const input = document.createElement('input');
+            input.type = 'text';
+            input.id = 'prompt-input';
+            
+            const okBtn = document.createElement('button');
+            okBtn.textContent = 'OK';
+            const cancelBtn = document.createElement('button');
+            cancelBtn.textContent = 'ОТМЕНА';
+            
+            modal.appendChild(content);
+            modal.appendChild(input);
+            modal.appendChild(okBtn);
+            modal.appendChild(cancelBtn);
+            overlay.appendChild(modal);
+            document.body.appendChild(overlay);
+            
+            document.body.style.overflow = 'hidden';
+            
+            function close(result) {
+                overlay.remove();
+                document.body.style.overflow = '';
+                if (focusedElement && focusedElement.focus) {
+                    focusedElement.focus();
+                }
+                callback(result);
+            }
+            
+            okBtn.onclick = () => close(input.value);
+            cancelBtn.onclick = () => close(null);
+            
+            input.addEventListener('keydown', function(e) {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    close(input.value);
+                } else if (e.key === 'Escape') {
+                    e.preventDefault();
+                    close(null);
+                }
+            });
+            
+            setTimeout(() => input.focus(), 0);
+            
+            overlay.addEventListener('keydown', function(e) {
+                if (e.key === 'Tab') {
+                    const focusable = [input, okBtn, cancelBtn];
+                    const firstFocusable = focusable[0];
+                    const lastFocusable = focusable[focusable.length - 1];
+                    
+                    if (e.shiftKey) {
+                        if (document.activeElement === firstFocusable) {
+                            e.preventDefault();
+                            lastFocusable.focus();
+                        }
+                    } else {
+                        if (document.activeElement === lastFocusable) {
+                            e.preventDefault();
+                            firstFocusable.focus();
+                        }
+                    }
+                }
+            });
+        }
+        
+        function testPrompt() {
+            showPrompt("Введите что-нибудь<br>... умное:", function(value) {
+                alert(value);
+            });
+        }
+    </script>
+</body>
+</html>

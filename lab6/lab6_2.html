@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Плейсхолдер</title>
+    <style>
+        .input-container {
+            position: relative;
+            margin: 50px;
+        }
+        input {
+            width: 250px;
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+        }
+        .placeholder {
+            color: blue;
+            font-style: italic;
+        }
+        .hint {
+            position: absolute;
+            top: -20px;
+            left: 5px;
+            font-size: 12px;
+            color: blue;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="input-container">
+        <input type="text" id="myInput" data-placeholder="Введите текст...">
+        <div class="hint" id="hint"></div>
+    </div>
+
+    <script>
+        'use strict';
+
+        const input = document.getElementById('myInput');
+        const hint = document.getElementById('hint');
+        const placeholderText = input.getAttribute('data-placeholder');
+        
+        input.value = placeholderText;
+        input.classList.add('placeholder');
+        
+        input.addEventListener('focus', function() {
+            hint.textContent = placeholderText;
+            hint.style.display = 'block';
+            
+            if (this.value === placeholderText) {
+                this.value = '';
+                this.classList.remove('placeholder');
+            }
+        });
+        
+        input.addEventListener('blur', function() {
+            hint.style.display = 'none';
+            
+            if (this.value === '') {
+                this.value = placeholderText;
+                this.classList.add('placeholder');
+            }
+        });
+    </script>
+</body>
+</html>
