@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Лабораторная работа №4</title>
+</head>
+<body>
+    <p>Откройте консоль</p>
+
+    <script type="module">
+        import { 
+            Book, 
+            isEmpty, 
+            addClassMethods, 
+            getSecondsToday, 
+            formatDate 
+        } from './lab4.js';
+
+        // 1. Создание экземпляра класса Book и вызов метода show
+        const book1 = new Book("Война и мир", 1869, 500);
+        book1.show();
+
+        // 2. Попытка изменить значения свойств
+        const book2 = new Book("Преступление и наказание", 1866, 450);
+        console.log(`До изменения: ${book2.title}, ${book2.pubYear}, ${book2.price}`);
+        
+        book2.title = "Идиот";
+        book2.pubYear = 1868;
+        book2.price = 600;
+        console.log(`После изменения: ${book2.title}, ${book2.pubYear}, ${book2.price}`);
+        
+        // Попытка установить некорректные значения
+        try {
+            book2.title = "";
+        } catch(e) {
+            console.log(e.message);
+        }
+        
+        try {
+            book2.pubYear = -2020;
+        } catch(e) {
+            console.log(e.message);
+        }
+        
+        try {
+            book2.price = -100;
+        } catch(e) {
+            console.log(e.message);
+        }
+
+        // 3. Сортировка массива книг
+        const books = [
+            new Book("Книга 1", 2000, 300),
+            new Book("Книга 2", 1995, 250),
+            new Book("Книга 3", 2010, 400)
+        ];
+        
+        console.log("До сортировки:");
+        books.forEach(book => console.log(`${book.title} - ${book.pubYear}`));
+        
+        books.sort(Book.compare);
+        
+        console.log("После сортировки:");
+        books.forEach(book => console.log(`${book.title} - ${book.pubYear}`));
+
+        // 4. Проверка функции isEmpty
+        console.log(isEmpty({}));
+        console.log(isEmpty({ [Symbol()]: true }));
+        console.log(isEmpty(Object.defineProperty({}, 'name', { value: 'John' })));
+
+        // 5. Проверка addClass и removeClass
+        let obj = { className: 'open menu' };
+        obj = addClassMethods(obj);
+        
+        obj.addClass('new').addClass('open').addClass('active');
+        console.log(obj.className);
+        
+        obj.removeClass('menu').removeClass('active');
+        console.log(obj.className);
+
+        // 6. Преобразование в JSON
+        const testObj = {
+            name: "Тест",
+            nested: {
+                value: 123
+            }
+        };
+        
+        const json = JSON.stringify(testObj, null, 2);
+        console.log(json);
+        
+        const obj2 = JSON.parse(json);
+        console.log(JSON.stringify(testObj) === JSON.stringify(obj2));
+
+        // 7. getSecondsToday
+        console.log(getSecondsToday());
+
+        // 8. formatDate
+        console.log(formatDate(new Date()));
+    </script>
+</body>
+</html>
