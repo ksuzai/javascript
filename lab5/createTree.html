@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Дерево из объекта</title>
+</head>
+<body>
+    <div id="container"></div>
+
+    <script>
+        'use strict'
+
+        let data = {
+            "Рыбы": {
+                "форель": {},
+                "лосось": {}
+            },
+            "Деревья": {
+                "Огромные": {
+                    "секвойя": {},
+                    "дуб": {}
+                },
+                "Цветковые": {
+                    "яблоня": {},
+                    "магнолия": {}
+                }
+            }
+        };
+
+        function createTree(container, data) {
+            container.innerHTML = '';
+            
+            function createUl(obj) {
+                const ul = document.createElement('ul');
+                
+                for (let key in obj) {
+                    const li = document.createElement('li');
+                    li.textContent = key;
+                    
+                    if (Object.keys(obj[key]).length > 0) {
+                        li.appendChild(createUl(obj[key]));
+                    }
+                    
+                    ul.appendChild(li);
+                }
+                
+                return ul;
+            }
+            
+            container.appendChild(createUl(data));
+        }
+
+        let container = document.getElementById('container');
+        createTree(container, data);
+    </script>
+</body>
+</html>
