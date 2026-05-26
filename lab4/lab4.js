@@ -3,7 +3,7 @@
  */
 export class Book {
     /** @type {string} - Название книги */
-    #title;
+    title; 
     
     /** @type {number} - Год издания (защищенное поле) */
     _pubYear;
@@ -19,17 +19,9 @@ export class Book {
      * @throws {Error} Если валидация не пройдена
      */
     constructor(title, pubYear, price) {
-        this.title = title;
+        this.title = title; 
         this._pubYear = pubYear;
         this.#price = price;
-    }
-
-    /**
-     * Геттер для названия книги
-     * @returns {string} Название книги
-     */
-    get title() {
-        return this.#title;
     }
 
     /**
@@ -41,7 +33,15 @@ export class Book {
         if (typeof value !== 'string' || value.trim() === '') {
             throw new Error('Название книги не может быть пустой строкой');
         }
-        this.#title = value;
+        this.title = value;  
+    }
+
+    /**
+     * Геттер для названия книги
+     * @returns {string} Название книги
+     */
+    get title() {
+        return this.title;
     }
 
     /**
@@ -104,30 +104,14 @@ export class Book {
     }
 }
 
-/**
- * Функция, которая проверяет, пустой ли объект (не имеет свойств, включая символьные)
- * @param {object} obj - Проверяемый объект
- * @returns {boolean} true, если объект не имеет свойств, иначе false
- */
 export function isEmpty(obj) {
-    if (Object.keys(obj).length > 0) return false;
+    const stringKeys = Object.keys(obj);
+    const symbolKeys = Object.getOwnPropertySymbols(obj);
     
-    if (Object.getOwnPropertySymbols(obj).length > 0) return false;
-    
-    return true;
+    return Reflect.ownKeys(obj).length === 0;
 }
 
-/**
- * Расширяет объект методами для работы с классами в строке className
- * @param {object} obj - Объект со свойством className
- * @returns {object} Объект с добавленными методами
- */
 export function addClassMethods(obj) {
-    /**
-     * Добавляет класс в список
-     * @param {string} cls - Добавляемый класс
-     * @returns {object} Объект для цепочки вызовов
-     */
     obj.addClass = function(cls) {
         const classes = this.className ? this.className.split(' ') : [];
         if (!classes.includes(cls)) {
@@ -137,11 +121,6 @@ export function addClassMethods(obj) {
         return this;
     };
 
-    /**
-     * Удаляет класс из списка
-     * @param {string} cls - Удаляемый класс
-     * @returns {object} Объект для цепочки вызовов
-     */
     obj.removeClass = function(cls) {
         const classes = this.className ? this.className.split(' ') : [];
         const index = classes.indexOf(cls);
@@ -155,21 +134,12 @@ export function addClassMethods(obj) {
     return obj;
 }
 
-/**
- * Возвращает количество секунд, прошедших с начала текущего дня
- * @returns {number} Количество секунд
- */
 export function getSecondsToday() {
     const now = new Date();
     const startOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate());
     return Math.floor((now - startOfDay) / 1000);
 }
 
-/**
- * Форматирует дату в формат "дд.мм.гг"
- * @param {Date} date - Форматируемая дата
- * @returns {string} Отформатированная строка даты
- */
 export function formatDate(date) {
     const day = String(date.getDate()).padStart(2, '0');
     const month = String(date.getMonth() + 1).padStart(2, '0');
@@ -177,12 +147,6 @@ export function formatDate(date) {
     return `${day}.${month}.${year}`;
 }
 
-/**
- * Глубокое сравнение двух объектов
- * @param {object} obj1 - Первый объект
- * @param {object} obj2 - Второй объект
- * @returns {boolean} true, если объекты равны
- */
 export function deepEqual(obj1, obj2) {
     return JSON.stringify(obj1) === JSON.stringify(obj2);
 }
