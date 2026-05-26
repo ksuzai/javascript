@@ -105,9 +105,6 @@ export class Book {
 }
 
 export function isEmpty(obj) {
-    const stringKeys = Object.keys(obj);
-    const symbolKeys = Object.getOwnPropertySymbols(obj);
-    
     return Reflect.ownKeys(obj).length === 0;
 }
 
